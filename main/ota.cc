@@ -60,6 +60,7 @@ Http* Ota::SetupHttp() {
     if (has_serial_number_) {
         http->SetHeader("Serial-Number", serial_number_.c_str());
     }
+    http->SetHeader("User-Agent", std::string(BOARD_NAME "/") + app_desc->version);
     http->SetHeader("Accept-Language", Lang::CODE);
     http->SetHeader("Content-Type", "application/json");
 
@@ -147,6 +148,10 @@ bool Ota::CheckVersion() {
                 if (settings.GetString(item->string) != item->valuestring) {
                     settings.SetString(item->string, item->valuestring);
                 }
+            } else if (cJSON_IsNumber(item)) {
+                if (settings.GetInt(item->string) != item->valueint) {
+                    settings.SetInt(item->string, item->valueint);
+                }
             }
         }
         has_mqtt_config_ = true;
@@ -161,9 +166,13 @@ bool Ota::CheckVersion() {
         cJSON *item = NULL;
         cJSON_ArrayForEach(item, websocket) {
             if (cJSON_IsString(item)) {
-                settings.SetString(item->string, item->valuestring);
+                if (settings.GetString(item->string) != item->valuestring) {
+                    settings.SetString(item->string, item->valuestring);
+                }
             } else if (cJSON_IsNumber(item)) {
-                settings.SetInt(item->string, item->valueint);
+                if (settings.GetInt(item->string) != item->valueint) {
+                    settings.SetInt(item->string, item->valueint);
+                }
             }
         }
         has_websocket_config_ = true;
@@ -266,6 +275,11 @@ void Ota::Upgrade(const std::string& firmware_url) {
     auto http = std::unique_ptr<Http>(Board::GetInstance().CreateHttp());
     if (!http->Open("GET", firmware_url)) {
         ESP_LOGE(TAG, "Failed to open HTTP connection");
+        return;
+    }
+
+    if (http->GetStatusCode() != 200) {
+        ESP_LOGE(TAG, "Failed to get firmware, status code: %d", http->GetStatusCode());
         return;
     }
 
