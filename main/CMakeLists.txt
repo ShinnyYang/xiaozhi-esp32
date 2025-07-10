@@ -4,6 +4,7 @@ set(SOURCES "audio_codecs/audio_codec.cc"
             "audio_codecs/es8311_audio_codec.cc"
             "audio_codecs/es8374_audio_codec.cc"
             "audio_codecs/es8388_audio_codec.cc"
+            "audio_processing/audio_debugger.cc"
             "led/single_led.cc"
             "led/circular_strip.cc"
             "led/gpio_led.cc"
@@ -100,6 +101,8 @@ elseif(CONFIG_BOARD_TYPE_ESP_SPOT_S3)
     set(BOARD_TYPE "esp-spot-s3")
 elseif(CONFIG_BOARD_TYPE_ESP_HI)
     set(BOARD_TYPE "esp-hi")
+elseif(CONFIG_BOARD_TYPE_ECHOEAR)
+    set(BOARD_TYPE "echoear")
 elseif(CONFIG_BOARD_TYPE_ESP32S3_Touch_AMOLED_1_8)
     set(BOARD_TYPE "esp32-s3-touch-amoled-1.8")
 elseif(CONFIG_BOARD_TYPE_ESP32S3_Touch_AMOLED_1_75)
@@ -112,6 +115,10 @@ elseif(CONFIG_BOARD_TYPE_ESP32S3_Touch_LCD_1_46)
     set(BOARD_TYPE "esp32-s3-touch-lcd-1.46")
 elseif(CONFIG_BOARD_TYPE_ESP32S3_Touch_LCD_3_5)
     set(BOARD_TYPE "esp32-s3-touch-lcd-3.5")
+elseif(CONFIG_BOARD_TYPE_ESP32S3_Touch_LCD_3_5B)
+    set(BOARD_TYPE "waveshare-s3-touch-lcd-3.5b")
+elseif(CONFIG_BOARD_TYPE_ESP32C6_LCD_1_69)
+    set(BOARD_TYPE "waveshare-c6-lcd-1.69")
 elseif(CONFIG_BOARD_TYPE_ESP32P4_NANO)
     set(BOARD_TYPE "waveshare-p4-nano")
 elseif(CONFIG_BOARD_TYPE_ESP32P4_WIFI6_Touch_LCD_4B)
@@ -186,6 +193,14 @@ elseif(CONFIG_BOARD_TYPE_ESP32_S3_1_54_MUMA)
     set(BOARD_TYPE "sp-esp32-s3-1.54-muma")
 elseif(CONFIG_BOARD_TYPE_ESP32_S3_1_28_BOX)
     set(BOARD_TYPE "sp-esp32-s3-1.28-box")
+elseif(CONFIG_BOARD_TYPE_OTTO_ROBOT)
+    set(BOARD_TYPE "otto-robot")
+elseif(CONFIG_BOARD_TYPE_ELECTRON_BOT)
+    set(BOARD_TYPE "electron-bot")
+elseif(CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI_CAM)
+    set(BOARD_TYPE "bread-compact-wifi-s3cam")
+elseif(CONFIG_BOARD_TYPE_JIUCHUAN )
+    set(BOARD_TYPE "jiuchuan-s3")
 endif()
 file(GLOB BOARD_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_TYPE}/*.cc
